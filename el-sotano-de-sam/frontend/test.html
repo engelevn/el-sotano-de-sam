@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Probar API</title>
+</head>
+
+<body>
+
+<h2>Probar API - Agregar Producto</h2>
+
+<button onclick="agregarProducto()">Agregar Producto</button>
+
+<script>
+
+function agregarProducto(){
+
+fetch("http://127.0.0.1:5000/api/productos", {
+
+method: "POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body: JSON.stringify({
+nombre: "Chaqueta Vintage Levi's",
+marca: "Levi's",
+talla: "M",
+categoria: "Chaquetas",
+precio: 85000,
+estado: "disponible",
+stock: 3
+})
+
+})
+
+.then(res => res.json())
+.then(data => {
+
+console.log(data)
+alert("Producto agregado!")
+
+})
+
+.catch(error => console.error(error))
+
+}
+
+</script>
+
+</body>
+</html>
