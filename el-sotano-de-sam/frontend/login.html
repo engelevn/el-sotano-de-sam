@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Sótano de Sam — Acceder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --bg-card: #0a0a0a;
+            --green: #00ff41;
+            --green-dim: #00cc33;
+            --green-glow: rgba(0, 255, 65, 0.12);
+            --green-subtle: rgba(0, 255, 65, 0.06);
+            --text: #c8c8c8;
+            --text-dim: #555;
+            --text-bright: #f5f5f5;
+            --border: #1a1a1a;
+            --red: #ff3344;
+            --font-display: 'Space Mono', monospace;
+            --font-body: 'Outfit', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Fondo con efecto de líneas de escaneo */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 255, 65, 0.008) 2px,
+                rgba(0, 255, 65, 0.008) 4px
+            );
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Resplandor verde de fondo */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 255, 65, 0.04) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ============================================
+           TARJETA DE LOGIN
+           ============================================ */
+        .login-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 420px;
+            padding: 0 20px;
+        }
+
+        .login-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 40px;
+            animation: card-in 0.5s ease;
+        }
+
+        @keyframes card-in {
+            from { opacity: 0; transform: translateY(15px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Volver al inicio */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 13px;
+            margin-bottom: 32px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--green);
+        }
+
+        /* Header del login */
+        .login-header {
+            margin-bottom: 32px;
+        }
+
+        .login-brand {
+            font-family: var(--font-display);
+            font-size: 11px;
+            color: var(--green);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .login-brand::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 10px var(--green);
+        }
+
+        .login-header h1 {
+            font-family: var(--font-display);
+            font-size: 24px;
+            color: var(--text-bright);
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .login-header p {
+            color: var(--text-dim);
+            font-size: 14px;
+        }
+
+        /* ============================================
+           FORMULARIO
+           ============================================ */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-bright);
+            font-family: var(--font-body);
+            font-size: 15px;
+            outline: none;
+            transition: all 0.25s;
+        }
+
+        .form-group input:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px var(--green-glow);
+        }
+
+        .form-group input::placeholder {
+            color: #333;
+        }
+
+        /* Botón mostrar/ocultar contraseña */
+        .toggle-password {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
+            transition: color 0.2s;
+        }
+
+        .toggle-password:hover {
+            color: var(--green);
+        }
+
+        /* Botón principal */
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: var(--green);
+            color: var(--bg);
+            border: none;
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            margin-top: 8px;
+        }
+
+        .btn-login:hover {
+            background: var(--green-dim);
+            box-shadow: 0 0 24px var(--green-glow);
+        }
+
+        .btn-login:active {
+            transform: scale(0.98);
+        }
+
+        /* Mensaje de error */
+        .error-msg {
+            display: none;
+            padding: 10px 14px;
+            background: rgba(255, 51, 68, 0.08);
+            border: 1px solid rgba(255, 51, 68, 0.2);
+            border-radius: 6px;
+            color: var(--red);
+            font-size: 13px;
+            margin-bottom: 16px;
+        }
+
+        .error-msg.show {
+            display: block;
+        }
+
+        /* Links debajo del botón */
+        .login-footer {
+            margin-top: 24px;
+            text-align: center;
+        }
+
+        .login-footer a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .login-footer a:hover {
+            color: var(--green);
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 480px) {
+            .login-card { padding: 28px 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <a href="index.html" class="back-link">← Volver al inicio</a>
+
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-brand">El Sótano de Sam</div>
+                <h1>Accede</h1>
+                <p>Inicia sesión para continuar</p>
+            </div>
+
+            <div class="error-msg" id="error-msg">
+                Correo o contraseña incorrectos
+            </div>
+
+            <div class="form-group">
+                <label>Correo electrónico</label>
+                <input type="email" id="input-email" placeholder="elsotanodesam@sitioincreible.co">
+            </div>
+
+            <div class="form-group">
+                <label>Clave de acceso</label>
+                <div class="input-wrapper">
+                    <input type="password" id="input-password" placeholder="••••••••">
+                    <button class="toggle-password" onclick="togglePassword()" id="btn-toggle">👁</button>
+                </div>
+            </div>
+
+            <button class="btn-login" onclick="iniciarSesion()">Entrar</button>
+
+            <div class="login-footer">
+                <a href="#">¿Olvidaste tu contraseña?</a>
+                <a href="#">Iniciar como administrador</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         JAVASCRIPT
+         ============================================ -->
+    <script>
+        // ==========================================
+        // CREDENCIALES DEL ADMINISTRADOR
+        // En un proyecto real, esto se valida contra el backend.
+        // Para tu proyecto ADSO, esta validación simple es suficiente.
+        // ==========================================
+        const ADMIN_EMAIL = 'admin@sotanodesam.com';
+        const ADMIN_PASSWORD = 'admin123';
+
+        // ==========================================
+        // FUNCIÓN: Iniciar sesión
+        // ==========================================
+        function iniciarSesion() {
+            const email = document.getElementById('input-email').value.trim();
+            const password = document.getElementById('input-password').value;
+            const errorMsg = document.getElementById('error-msg');
+
+            // Validar campos vacíos
+            if (!email || !password) {
+                errorMsg.textContent = 'Por favor completa todos los campos';
+                errorMsg.classList.add('show');
+                return;
+            }
+
+            // Validar credenciales
+            if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+                // Login exitoso: guardar en localStorage y redirigir
+                localStorage.setItem('loggedIn', 'true');
+                localStorage.setItem('user', email);
+                window.location.href = 'dashboard.html';
+            } else {
+                // Credenciales incorrectas
+                errorMsg.textContent = 'Correo o contraseña incorrectos';
+                errorMsg.classList.add('show');
+
+                // Sacudir el formulario (efecto visual de error)
+                document.querySelector('.login-card').style.animation = 'none';
+                setTimeout(() => {
+                    document.querySelector('.login-card').style.animation = 'shake 0.4s ease';
+                }, 10);
+            }
+        }
+
+        // ==========================================
+        // FUNCIÓN: Mostrar/ocultar contraseña
+        // ==========================================
+        function togglePassword() {
+            const input = document.getElementById('input-password');
+            const btn = document.getElementById('btn-toggle');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = '🔒';
+            } else {
+                input.type = 'password';
+                btn.textContent = '👁';
+            }
+        }
+
+        // ==========================================
+        // Permitir login con tecla Enter
+        // ==========================================
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') iniciarSesion();
+        });
+    </script>
+
+    <style>
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            50% { transform: translateX(8px); }
+            75% { transform: translateX(-4px); }
+        }
+    </style>
+</body>
+</html>

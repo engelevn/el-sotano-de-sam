@@ -1,56 +1,133 @@
+# ============================================
+# app.py — Servidor Flask con API REST
+# El Sótano de Sam — Stock en Línea
+# ============================================
+
 from flask import Flask, request, jsonify
-from flask_cors import CORS
-import sqlite3
+from flask_cors import CORS  # <-- NUEVO: permite que el frontend se conecte
 from database import conectar, crear_tabla
 
+# Crear la aplicación Flask
 app = Flask(__name__)
+
+# Habilitar CORS para que el frontend pueda hacer peticiones
+# Sin esto, el navegador BLOQUEA las peticiones del HTML al servidor
 CORS(app)
 
-# Crear tabla al iniciar
+# Crear la tabla al iniciar (si no existe)
 crear_tabla()
 
-
+# ==========================================
+# RUTA 1: Obtener todos los productos (GET)
+# ==========================================
 @app.route('/api/productos', methods=['GET'])
 def obtener_productos():
     conexion = conectar()
     cursor = conexion.cursor()
-
-    cursor.execute("SELECT * FROM productos")
+    cursor.execute('SELECT * FROM productos ORDER BY id DESC')
     productos = [dict(row) for row in cursor.fetchall()]
-
     conexion.close()
-    return jsonify(productos)
+    return jsonify(productos), 200
 
-
+# ==========================================
+# RUTA 2: Agregar un producto nuevo (POST)
+# ==========================================
 @app.route('/api/productos', methods=['POST'])
 def agregar_producto():
-    datos = request.json
-
+    datos = request.get_json()
+    
+    if not datos.get('nombre') or not datos.get('precio'):
+        return jsonify({'error': 'Nombre y precio son obligatorios'}), 400
+    
     conexion = conectar()
     cursor = conexion.cursor()
-
-    cursor.execute("""
-    INSERT INTO productos (nombre, marca, talla, categoria, precio, estado, stock)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
-    """, (
+    cursor.execute('''
+        INSERT INTO productos (nombre, marca, talla, categoria, precio, estado, stock)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    ''', (
         datos['nombre'],
-        datos['marca'],
-        datos['talla'],
-        datos['categoria'],
+        datos.get('marca', ''),
+        datos.get('talla', ''),
+        datos.get('categoria', ''),
         datos['precio'],
-        datos['estado'],
-        datos['stock']
+        datos.get('estado', 'disponible'),
+        datos.get('stock', 0)
     ))
-
+    
     conexion.commit()
     nuevo_id = cursor.lastrowid
     conexion.close()
-
+    
     return jsonify({
-        "mensaje": "Producto agregado exitosamente",
-        "id": nuevo_id
-    })
+        'mensaje': 'Producto agregado exitosamente',
+        'id': nuevo_id
+    }), 201
 
+# ==============================================
+# RUTA 3: Actualizar un producto existente (PUT)
+# ==============================================
+@app.route('/api/productos/<int:id>', methods=['PUT'])
+def actualizar_producto(id):
+    datos = request.get_json()
+    
+    conexion = conectar()
+    cursor = conexion.cursor()
+    cursor.execute('''
+        UPDATE productos 
+        SET nombre=?, marca=?, talla=?, categoria=?, precio=?, estado=?, stock=?
+        WHERE id=?
+    ''', (
+        datos.get('nombre'),
+        datos.get('marca'),
+        datos.get('talla'),
+        datos.get('categoria'),
+        datos.get('precio'),
+        datos.get('estado'),
+        datos.get('stock'),
+        id
+    ))
+    
+    conexion.commit()
+    conexion.close()
+    
+    return jsonify({'mensaje': 'Producto actualizado exitosamente'}), 200
 
+# ==========================================
+# RUTA 4: Eliminar un producto (DELETE)
+# ==========================================
+@app.route('/api/productos/<int:id>', methods=['DELETE'])
+def eliminar_producto(id):
+    conexion = conectar()
+    cursor = conexion.cursor()
+    cursor.execute('DELETE FROM productos WHERE id=?', (id,))
+    
+    conexion.commit()
+    conexion.close()
+    
+    return jsonify({'mensaje': 'Producto eliminado exitosamente'}), 200
+
+# ==========================================
+# RUTA 5: Buscar un producto por ID (GET)
+# ==========================================
+@app.route('/api/productos/<int:id>', methods=['GET'])
+def obtener_producto(id):
+    conexion = conectar()
+    cursor = conexion.cursor()
+    cursor.execute('SELECT * FROM productos WHERE id=?', (id,))
+    producto = cursor.fetchone()
+    conexion.close()
+    
+    if producto:
+        return jsonify(dict(producto)), 200
+    else:
+        return jsonify({'error': 'Producto no encontrado'}), 404
+
+# ==========================================
+# Iniciar el servidor
+# ==========================================
 if __name__ == '__main__':
-    app.run(debug=True)
+    print("=" * 50)
+    print("  EL SÓTANO DE SAM — Servidor API")
+    print("  http://127.0.0.1:5000/api/productos")
+    print("=" * 50)
+    app.run(debug=True, port=5000)

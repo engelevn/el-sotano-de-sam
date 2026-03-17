@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Sótano de Sam — El lujo silencioso vive aquí</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --green: #00ff41;
+            --green-dim: #00cc33;
+            --green-glow: rgba(0, 255, 65, 0.15);
+            --text: #c8c8c8;
+            --text-dim: #555;
+            --text-bright: #f5f5f5;
+            --border: #1a1a1a;
+            --font-display: 'Space Mono', monospace;
+            --font-body: 'Outfit', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ============================================
+           NAVEGACIÓN SUPERIOR
+           ============================================ */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 40px;
+            background: rgba(5, 5, 5, 0.6);
+            backdrop-filter: blur(20px);
+        }
+
+        .nav-brand {
+            font-family: var(--font-display);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-bright);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--green);
+        }
+
+        .nav-links .btn-login {
+            padding: 8px 20px;
+            border: 1px solid var(--green);
+            border-radius: 4px;
+            color: var(--green);
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-links .btn-login:hover {
+            background: var(--green);
+            color: var(--bg);
+        }
+
+        /* ============================================
+           HERO SECTION
+           ============================================ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 0 40px;
+            overflow: hidden;
+        }
+
+        /* Efecto de líneas verdes en el fondo */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 50%;
+            height: 100%;
+            background:
+                linear-gradient(180deg, transparent 0%, rgba(0, 255, 65, 0.03) 50%, transparent 100%),
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 255, 65, 0.015) 2px,
+                    rgba(0, 255, 65, 0.015) 4px
+                );
+            pointer-events: none;
+        }
+
+        /* Resplandor verde sutil */
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 30%;
+            right: 10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 255, 65, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+            animation: float-glow 8s ease-in-out infinite;
+        }
+
+        @keyframes float-glow {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-30px, 20px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+        }
+
+        .hero-tag {
+            font-family: var(--font-display);
+            font-size: 11px;
+            color: var(--green);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hero-tag::before {
+            content: '';
+            width: 30px;
+            height: 1px;
+            background: var(--green);
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(36px, 6vw, 64px);
+            font-weight: 700;
+            color: var(--text-bright);
+            line-height: 1.1;
+            letter-spacing: -1px;
+            margin-bottom: 24px;
+        }
+
+        .hero-title .highlight {
+            color: var(--green);
+            text-shadow: 0 0 40px rgba(0, 255, 65, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 16px;
+            color: var(--text-dim);
+            line-height: 1.7;
+            margin-bottom: 40px;
+            max-width: 480px;
+            font-weight: 300;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 14px 32px;
+            background: var(--green);
+            color: var(--bg);
+            text-decoration: none;
+            font-family: var(--font-body);
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: all 0.3s;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary:hover {
+            background: var(--green-dim);
+            box-shadow: 0 0 30px var(--green-glow);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            display: inline-block;
+            padding: 14px 32px;
+            background: transparent;
+            color: var(--text);
+            text-decoration: none;
+            font-family: var(--font-body);
+            font-size: 14px;
+            font-weight: 500;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-dim);
+            color: var(--text-bright);
+        }
+
+        /* ============================================
+           SECCIÓN FEATURES
+           ============================================ */
+        .features {
+            padding: 100px 40px;
+            border-top: 1px solid var(--border);
+        }
+
+        .features-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .features-header h2 {
+            font-family: var(--font-display);
+            font-size: 28px;
+            color: var(--text-bright);
+            margin-bottom: 12px;
+        }
+
+        .features-header p {
+            color: var(--text-dim);
+            font-size: 15px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            padding: 32px;
+            background: #0a0a0a;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(0, 255, 65, 0.2);
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        .feature-card h3 {
+            font-family: var(--font-display);
+            font-size: 14px;
+            color: var(--text-bright);
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        footer {
+            padding: 40px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        footer p {
+            color: var(--text-dim);
+            font-size: 13px;
+        }
+
+        footer .footer-brand {
+            font-family: var(--font-display);
+            color: var(--green-dim);
+            font-weight: 700;
+        }
+
+        /* ============================================
+           ANIMACIONES DE ENTRADA
+           ============================================ */
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-tag { animation: fade-up 0.6s ease 0.1s both; }
+        .hero-title { animation: fade-up 0.6s ease 0.25s both; }
+        .hero-subtitle { animation: fade-up 0.6s ease 0.4s both; }
+        .hero-actions { animation: fade-up 0.6s ease 0.55s both; }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 768px) {
+            nav { padding: 16px 20px; }
+            .nav-links { gap: 16px; }
+            .hero { padding: 0 20px; }
+            .features { padding: 60px 20px; }
+            .features-grid { grid-template-columns: 1fr; }
+            .hero-actions { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================
+         NAVEGACIÓN
+         ============================================ -->
+    <nav>
+        <div class="nav-brand">El Sótano de Sam</div>
+        <div class="nav-links">
+            <a href="#features">Sistema</a>
+            <a href="login.html" class="btn-login">Acceder</a>
+        </div>
+    </nav>
+
+    <!-- ============================================
+         HERO
+         ============================================ -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-tag">Importado · Exclusivo · Atemporal</div>
+            <h1 class="hero-title">
+                El lujo<br>
+                silencioso<br>
+                <span class="highlight">vive aquí</span>
+            </h1>
+            <p class="hero-subtitle">
+                Sistema de gestión de inventario para ropa vintage y de segunda mano.
+                Control total de stock, categorías y productos en tiempo real.
+            </p>
+            <div class="hero-actions">
+                <a href="login.html" class="btn-primary">Registrarse</a>
+                <a href="#features" class="btn-secondary">Vista previa</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         FEATURES
+         ============================================ -->
+    <section class="features" id="features">
+        <div class="features-header">
+            <h2>Sistema de gestión</h2>
+            <p>Todo lo que necesitas para administrar tu inventario vintage</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📦</div>
+                <h3>Inventario completo</h3>
+                <p>Registra cada prenda con nombre, marca, talla, categoría, precio y estado de forma organizada.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>API REST</h3>
+                <p>Backend robusto con endpoints para crear, leer, actualizar y eliminar productos en tiempo real.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Dashboard admin</h3>
+                <p>Panel de control con estadísticas de stock, valor del inventario y gestión visual de productos.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         FOOTER
+         ============================================ -->
+    <footer>
+        <p><span class="footer-brand">El Sótano de Sam</span> — Stock en Línea · Proyecto ADSO 2026</p>
+    </footer>
+
+</body>
+</html>
