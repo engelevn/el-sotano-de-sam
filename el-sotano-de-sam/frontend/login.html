@@ -1,396 +1,100 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Sótano de Sam — Acceder</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #050505;
-            --bg-card: #0a0a0a;
-            --green: #00ff41;
-            --green-dim: #00cc33;
-            --green-glow: rgba(0, 255, 65, 0.12);
-            --green-subtle: rgba(0, 255, 65, 0.06);
-            --text: #c8c8c8;
-            --text-dim: #555;
-            --text-bright: #f5f5f5;
-            --border: #1a1a1a;
-            --red: #ff3344;
-            --font-display: 'Space Mono', monospace;
-            --font-body: 'Outfit', sans-serif;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: var(--font-body);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Fondo con efecto de líneas de escaneo */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 2px,
-                rgba(0, 255, 65, 0.008) 2px,
-                rgba(0, 255, 65, 0.008) 4px
-            );
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* Resplandor verde de fondo */
-        body::after {
-            content: '';
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(0, 255, 65, 0.04) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* ============================================
-           TARJETA DE LOGIN
-           ============================================ */
-        .login-container {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            max-width: 420px;
-            padding: 0 20px;
-        }
-
-        .login-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 40px;
-            animation: card-in 0.5s ease;
-        }
-
-        @keyframes card-in {
-            from { opacity: 0; transform: translateY(15px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        /* Volver al inicio */
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--text-dim);
-            text-decoration: none;
-            font-size: 13px;
-            margin-bottom: 32px;
-            transition: color 0.2s;
-        }
-
-        .back-link:hover {
-            color: var(--green);
-        }
-
-        /* Header del login */
-        .login-header {
-            margin-bottom: 32px;
-        }
-
-        .login-brand {
-            font-family: var(--font-display);
-            font-size: 11px;
-            color: var(--green);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .login-brand::before {
-            content: '';
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--green);
-            box-shadow: 0 0 10px var(--green);
-        }
-
-        .login-header h1 {
-            font-family: var(--font-display);
-            font-size: 24px;
-            color: var(--text-bright);
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-
-        .login-header p {
-            color: var(--text-dim);
-            font-size: 14px;
-        }
-
-        /* ============================================
-           FORMULARIO
-           ============================================ */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-        }
-
-        .input-wrapper {
-            position: relative;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 14px 16px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text-bright);
-            font-family: var(--font-body);
-            font-size: 15px;
-            outline: none;
-            transition: all 0.25s;
-        }
-
-        .form-group input:focus {
-            border-color: var(--green);
-            box-shadow: 0 0 0 3px var(--green-glow);
-        }
-
-        .form-group input::placeholder {
-            color: #333;
-        }
-
-        /* Botón mostrar/ocultar contraseña */
-        .toggle-password {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--text-dim);
-            cursor: pointer;
-            font-size: 16px;
-            padding: 4px;
-            transition: color 0.2s;
-        }
-
-        .toggle-password:hover {
-            color: var(--green);
-        }
-
-        /* Botón principal */
-        .btn-login {
-            width: 100%;
-            padding: 14px;
-            background: var(--green);
-            color: var(--bg);
-            border: none;
-            border-radius: 8px;
-            font-family: var(--font-body);
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.25s;
-            margin-top: 8px;
-        }
-
-        .btn-login:hover {
-            background: var(--green-dim);
-            box-shadow: 0 0 24px var(--green-glow);
-        }
-
-        .btn-login:active {
-            transform: scale(0.98);
-        }
-
-        /* Mensaje de error */
-        .error-msg {
-            display: none;
-            padding: 10px 14px;
-            background: rgba(255, 51, 68, 0.08);
-            border: 1px solid rgba(255, 51, 68, 0.2);
-            border-radius: 6px;
-            color: var(--red);
-            font-size: 13px;
-            margin-bottom: 16px;
-        }
-
-        .error-msg.show {
-            display: block;
-        }
-
-        /* Links debajo del botón */
-        .login-footer {
-            margin-top: 24px;
-            text-align: center;
-        }
-
-        .login-footer a {
-            color: var(--text-dim);
-            text-decoration: none;
-            font-size: 13px;
-            transition: color 0.2s;
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .login-footer a:hover {
-            color: var(--green);
-        }
-
-        /* ============================================
-           RESPONSIVE
-           ============================================ */
-        @media (max-width: 480px) {
-            .login-card { padding: 28px 24px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Sótano de Sam — Acceder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+--green:#00ff41;--green-dim:#00dd38;--green-glow:rgba(0,255,65,.15);--red:#ff3344;--font:'Outfit',sans-serif;
+--overlay:rgba(0,0,0,.50);
+--card-bg:rgba(255,255,255,.06);--card-border:rgba(255,255,255,.12);--card-shadow:rgba(0,0,0,.3);
+--input-bg:rgba(255,255,255,.07);--input-border:rgba(255,255,255,.1);
+--text:#ffffff;--text-secondary:rgba(255,255,255,.6);--text-placeholder:rgba(255,255,255,.25);--link-color:rgba(255,255,255,.5);--btn-text:#000;
+}
+body.light{
+--green:#55A630;--green-dim:#4a9228;--green-glow:rgba(85,166,48,.2);
+--overlay:rgba(255,255,255,.3);
+--card-bg:rgba(255,255,255,.55);--card-border:rgba(255,255,255,.6);--card-shadow:rgba(0,0,0,.1);
+--input-bg:rgba(255,255,255,.5);--input-border:rgba(0,0,0,.1);
+--text:#1a1a1a;--text-secondary:rgba(0,0,0,.5);--text-placeholder:rgba(0,0,0,.3);--link-color:rgba(0,0,0,.4);--btn-text:#fff;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:url('img/login-bg.jpg') center/cover no-repeat fixed;font-family:var(--font);min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;transition:all .4s}
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:var(--overlay);z-index:0;transition:background .4s}
+.login-container{position:relative;z-index:1;width:100%;max-width:420px;padding:20px}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--text-secondary);text-decoration:none;font-size:13px;margin-bottom:20px;transition:color .2s}
+.back-link:hover{color:var(--green)}
+.login-card{background:var(--card-bg);backdrop-filter:blur(30px) saturate(1.4);-webkit-backdrop-filter:blur(30px) saturate(1.4);border:1px solid var(--card-border);border-radius:20px;padding:36px;box-shadow:0 8px 32px var(--card-shadow),inset 0 1px 0 rgba(255,255,255,.1);animation:card-in .5s ease;transition:background .4s,border-color .4s,box-shadow .4s}
+@keyframes card-in{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.login-header{margin-bottom:28px}
+.login-brand{font-size:13px;font-weight:600;color:var(--green);letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.login-brand::before{display:none}
+.login-header h1{font-size:28px;font-weight:700;color:var(--text);margin-bottom:4px;transition:color .4s}
+.login-header p{color:var(--text-secondary);font-size:14px;font-weight:300;transition:color .4s}
+.form-group{margin-bottom:18px}
+.form-group label{display:block;font-size:11px;font-weight:500;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px;transition:color .4s}
+.input-wrapper{position:relative}
+.form-group input{width:100%;padding:14px 16px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:12px;color:var(--text);font-family:var(--font);font-size:14px;outline:none;transition:all .25s;backdrop-filter:blur(10px)}
+.form-group input:focus{border-color:var(--green);box-shadow:0 0 0 3px var(--green-glow)}
+.form-group input::placeholder{color:var(--text-placeholder)}
+.toggle-password{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:15px;padding:4px;transition:color .2s}
+.toggle-password:hover{color:var(--green)}
+.btn-login{width:100%;padding:14px;background:var(--green);color:var(--btn-text);border:none;border-radius:12px;font-family:var(--font);font-size:15px;font-weight:600;cursor:pointer;transition:all .25s;margin-top:6px}
+.btn-login:hover{background:var(--green-dim);box-shadow:0 0 24px var(--green-glow)}
+.btn-login:active{transform:scale(.98)}
+.error-msg{display:none;padding:10px 14px;background:rgba(255,51,68,.1);border:1px solid rgba(255,51,68,.25);border-radius:10px;color:var(--red);font-size:13px;margin-bottom:14px;backdrop-filter:blur(10px)}
+.error-msg.show{display:block}
+.login-footer{margin-top:22px;text-align:center}
+.login-footer a{color:var(--link-color);text-decoration:none;font-size:12px;font-weight:300;transition:color .2s;display:block;margin-bottom:6px}
+.login-footer a:hover{color:var(--green)}
+.theme-toggle{position:fixed;top:20px;right:20px;z-index:10;background:rgba(255,255,255,.1);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.15);color:var(--text);width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .3s}
+body.light .theme-toggle{background:rgba(0,0,0,.06);border-color:rgba(0,0,0,.1);color:#1a1a1a}
+.theme-toggle:hover{transform:scale(1.1)}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}50%{transform:translateX(8px)}75%{transform:translateX(-4px)}}
+@media(max-width:480px){.login-container{padding:16px}.login-card{padding:28px 22px;border-radius:16px}.login-header h1{font-size:24px}.theme-toggle{top:12px;right:12px;width:36px;height:36px;font-size:15px}}
+@media(max-width:360px){.login-card{padding:24px 18px}}
+@media(min-width:481px) and (max-width:768px){.login-container{max-width:380px}}
+@media(min-width:1200px){.login-container{max-width:440px}.login-card{padding:42px}}
+</style>
 </head>
 <body>
-
-    <div class="login-container">
-        <a href="index.html" class="back-link">← Volver al inicio</a>
-
-        <div class="login-card">
-            <div class="login-header">
-                <div class="login-brand">El Sótano de Sam</div>
-                <h1>Accede</h1>
-                <p>Inicia sesión para continuar</p>
-            </div>
-
-            <div class="error-msg" id="error-msg">
-                Correo o contraseña incorrectos
-            </div>
-
-            <div class="form-group">
-                <label>Correo electrónico</label>
-                <input type="email" id="input-email" placeholder="elsotanodesam@sitioincreible.co">
-            </div>
-
-            <div class="form-group">
-                <label>Clave de acceso</label>
-                <div class="input-wrapper">
-                    <input type="password" id="input-password" placeholder="••••••••">
-                    <button class="toggle-password" onclick="togglePassword()" id="btn-toggle">👁</button>
-                </div>
-            </div>
-
-            <button class="btn-login" onclick="iniciarSesion()">Entrar</button>
-
-            <div class="login-footer">
-                <a href="#">¿Olvidaste tu contraseña?</a>
-                <a href="#">Iniciar como administrador</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- ============================================
-         JAVASCRIPT
-         ============================================ -->
-    <script>
-        // ==========================================
-        // CREDENCIALES DEL ADMINISTRADOR
-        // En un proyecto real, esto se valida contra el backend.
-        // Para tu proyecto ADSO, esta validación simple es suficiente.
-        // ==========================================
-        const ADMIN_EMAIL = 'admin@sotanodesam.com';
-        const ADMIN_PASSWORD = 'admin123';
-
-        // ==========================================
-        // FUNCIÓN: Iniciar sesión
-        // ==========================================
-        function iniciarSesion() {
-            const email = document.getElementById('input-email').value.trim();
-            const password = document.getElementById('input-password').value;
-            const errorMsg = document.getElementById('error-msg');
-
-            // Validar campos vacíos
-            if (!email || !password) {
-                errorMsg.textContent = 'Por favor completa todos los campos';
-                errorMsg.classList.add('show');
-                return;
-            }
-
-            // Validar credenciales
-            if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-                // Login exitoso: guardar en localStorage y redirigir
-                localStorage.setItem('loggedIn', 'true');
-                localStorage.setItem('user', email);
-                window.location.href = 'dashboard.html';
-            } else {
-                // Credenciales incorrectas
-                errorMsg.textContent = 'Correo o contraseña incorrectos';
-                errorMsg.classList.add('show');
-
-                // Sacudir el formulario (efecto visual de error)
-                document.querySelector('.login-card').style.animation = 'none';
-                setTimeout(() => {
-                    document.querySelector('.login-card').style.animation = 'shake 0.4s ease';
-                }, 10);
-            }
-        }
-
-        // ==========================================
-        // FUNCIÓN: Mostrar/ocultar contraseña
-        // ==========================================
-        function togglePassword() {
-            const input = document.getElementById('input-password');
-            const btn = document.getElementById('btn-toggle');
-
-            if (input.type === 'password') {
-                input.type = 'text';
-                btn.textContent = '🔒';
-            } else {
-                input.type = 'password';
-                btn.textContent = '👁';
-            }
-        }
-
-        // ==========================================
-        // Permitir login con tecla Enter
-        // ==========================================
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') iniciarSesion();
-        });
-    </script>
-
-    <style>
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            50% { transform: translateX(8px); }
-            75% { transform: translateX(-4px); }
-        }
-    </style>
+<button class="theme-toggle" id="themeToggle" title="Cambiar tema"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21.75 15.5a9.72 9.72 0 0 1-5.46 1.63C10.29 17.13 5.13 12 5.13 5.97a9.7 9.7 0 0 1 1.63-5.46C2.96 2.35 0 6.53 0 11.38 0 18.4 5.6 24 12.62 24c4.85 0 9.03-2.96 10.88-7.17a9.8 9.8 0 0 1-1.75 1.3z"/></svg></button>
+<div class="login-container">
+<a href="index.html" class="back-link">← Volver al inicio</a>
+<div class="login-card">
+<div class="login-header">
+<div class="login-brand">El Sótano de Sam</div>
+<h1>Accede</h1>
+<p>Inicia sesión para continuar</p>
+</div>
+<div class="error-msg" id="error-msg">Correo o contraseña incorrectos</div>
+<div class="form-group">
+<label>Correo electrónico</label>
+<input type="email" id="input-email" placeholder="admin@sotanodesam.com">
+</div>
+<div class="form-group">
+<label>Clave de acceso</label>
+<div class="input-wrapper">
+<input type="password" id="input-password" placeholder="••••••••">
+<button class="toggle-password" onclick="togglePassword()" id="btn-toggle">👁</button>
+</div>
+</div>
+<button class="btn-login" onclick="iniciarSesion()">Entrar</button>
+<div class="login-footer">
+<a href="#">¿Olvidaste tu contraseña?</a>
+</div>
+</div>
+</div>
+<script>
+var ADMIN_EMAIL='admin@sotanodesam.com',ADMIN_PASSWORD='admin123';
+function iniciarSesion(){var e=document.getElementById('input-email').value.trim(),p=document.getElementById('input-password').value,err=document.getElementById('error-msg');if(!e||!p){err.textContent='Por favor completa todos los campos';err.classList.add('show');return}if(e===ADMIN_EMAIL&&p===ADMIN_PASSWORD){localStorage.setItem('loggedIn','true');localStorage.setItem('user',e);window.location.href='dashboard.html'}else{err.textContent='Correo o contraseña incorrectos';err.classList.add('show');document.querySelector('.login-card').style.animation='none';setTimeout(function(){document.querySelector('.login-card').style.animation='shake 0.4s ease'},10)}}
+function togglePassword(){var i=document.getElementById('input-password'),b=document.getElementById('btn-toggle');if(i.type==='password'){i.type='text';b.textContent='🔒'}else{i.type='password';b.textContent='👁'}}
+document.addEventListener('keydown',function(e){if(e.key==='Enter')iniciarSesion()});
+var themeToggle=document.getElementById('themeToggle');
+themeToggle.onclick=function(){document.body.classList.toggle('light');themeToggle.textContent=document.body.classList.contains('light')?'☀️':'🌙'};
+</script>
 </body>
 </html>

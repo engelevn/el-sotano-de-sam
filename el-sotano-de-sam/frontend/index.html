@@ -1,412 +1,520 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Sótano de Sam — El lujo silencioso vive aquí</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #050505;
-            --green: #00ff41;
-            --green-dim: #00cc33;
-            --green-glow: rgba(0, 255, 65, 0.15);
-            --text: #c8c8c8;
-            --text-dim: #555;
-            --text-bright: #f5f5f5;
-            --border: #1a1a1a;
-            --font-display: 'Space Mono', monospace;
-            --font-body: 'Outfit', sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Sótano de Sam — El lujo silencioso vive aquí</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b0b0b;
+  --bg-light: #111;
+  --bg-card: #161616;
+  --green: #00ff41;
+  --green-dim: #00dd38;
+  --green-glow: rgba(0,255,65,.12);
+  --green-subtle: rgba(0,255,65,.05);
+  --text: #b0b0b0;
+  --text-dim: #5a5a5a;
+  --text-bright: #ececec;
+  --border: #1e1e1e;
+  --font: 'Outfit', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --font-brand: Arial, sans-serif;
+}
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+body.light {
+  --bg: #f5f5f0;
+  --bg-light: #eaeae5;
+  --bg-card: #ffffff;
+  --green: #55A630;
+  --green-dim: #4a9228;
+  --green-glow: rgba(85,166,48,.15);
+  --green-subtle: rgba(85,166,48,.06);
+  --text: #4a4a4a;
+  --text-dim: #888;
+  --text-bright: #1a1a1a;
+  --border: #e0e0d8;
+}
 
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: var(--font-body);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* ============================================
-           NAVEGACIÓN SUPERIOR
-           ============================================ */
-        nav {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px 40px;
-            background: rgba(5, 5, 5, 0.6);
-            backdrop-filter: blur(20px);
-        }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background .4s, color .4s;
+}
 
-        .nav-brand {
-            font-family: var(--font-display);
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text-bright);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 40px;
+  background: rgba(0,0,0,.25);
+  backdrop-filter: blur(30px) saturate(1.4);
+  -webkit-backdrop-filter: blur(30px) saturate(1.4);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  transition: all .4s;
+}
 
-        .nav-links {
-            display: flex;
-            gap: 32px;
-            align-items: center;
-        }
+body.light nav {
+  background: rgba(255,255,255,.4);
+  border-bottom-color: rgba(0,0,0,.06);
+}
 
-        .nav-links a {
-            color: var(--text-dim);
-            text-decoration: none;
-            font-size: 13px;
-            letter-spacing: 0.5px;
-            transition: color 0.3s;
-        }
+.nav-brand {
+  font-family: var(--font-brand);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-bright);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
 
-        .nav-links a:hover {
-            color: var(--green);
-        }
+.nav-links { display: flex; gap: 24px; align-items: center; }
 
-        .nav-links .btn-login {
-            padding: 8px 20px;
-            border: 1px solid var(--green);
-            border-radius: 4px;
-            color: var(--green);
-            font-weight: 500;
-            transition: all 0.3s;
-        }
+.nav-links a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 13px;
+  transition: color .3s;
+}
+.nav-links a:hover { color: var(--green); }
 
-        .nav-links .btn-login:hover {
-            background: var(--green);
-            color: var(--bg);
-        }
+.nav-links .btn-login {
+  padding: 8px 20px;
+  border: 1px solid var(--green);
+  border-radius: 6px;
+  color: var(--green);
+  font-weight: 500;
+  transition: all .3s;
+}
+.nav-links .btn-login:hover { background: var(--green); color: var(--bg); }
 
-        /* ============================================
-           HERO SECTION
-           ============================================ */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            position: relative;
-            padding: 0 40px;
-            overflow: hidden;
-        }
+.theme-toggle {
+  background: rgba(255,255,255,.08);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.1);
+  color: var(--text-dim);
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 15px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .3s;
+}
+body.light .theme-toggle {
+  background: rgba(0,0,0,.05);
+  border-color: rgba(0,0,0,.1);
+}
+.theme-toggle:hover { border-color: var(--green); color: var(--green); }
 
-        /* Efecto de líneas verdes en el fondo */
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0; right: 0;
-            width: 50%;
-            height: 100%;
-            background:
-                linear-gradient(180deg, transparent 0%, rgba(0, 255, 65, 0.03) 50%, transparent 100%),
-                repeating-linear-gradient(
-                    0deg,
-                    transparent,
-                    transparent 2px,
-                    rgba(0, 255, 65, 0.015) 2px,
-                    rgba(0, 255, 65, 0.015) 4px
-                );
-            pointer-events: none;
-        }
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  position: relative;
+  padding: 0 40px;
+  overflow: hidden;
+  background: url('img/landing-bg.jpg') center center/cover no-repeat;
+}
 
-        /* Resplandor verde sutil */
-        .hero::after {
-            content: '';
-            position: absolute;
-            top: 30%;
-            right: 10%;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(0, 255, 65, 0.06) 0%, transparent 70%);
-            pointer-events: none;
-            animation: float-glow 8s ease-in-out infinite;
-        }
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,.40);
+  pointer-events: none;
+  z-index: 1;
+  transition: background .4s;
+}
 
-        @keyframes float-glow {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(-30px, 20px); }
-        }
+body.light .hero::before {
+  background: rgba(255,255,255,.3);
+}
 
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 700px;
-        }
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 30%; right: 10%;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, var(--green-glow) 0%, transparent 70%);
+  pointer-events: none;
+  animation: float-glow 8s ease-in-out infinite;
+  z-index: 1;
+}
 
-        .hero-tag {
-            font-family: var(--font-display);
-            font-size: 11px;
-            color: var(--green);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+@keyframes float-glow {
+  0%, 100% { transform: translate(0,0); }
+  50% { transform: translate(-30px,20px); }
+}
 
-        .hero-tag::before {
-            content: '';
-            width: 30px;
-            height: 1px;
-            background: var(--green);
-        }
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 650px;
+}
 
-        .hero-title {
-            font-family: var(--font-display);
-            font-size: clamp(36px, 6vw, 64px);
-            font-weight: 700;
-            color: var(--text-bright);
-            line-height: 1.1;
-            letter-spacing: -1px;
-            margin-bottom: 24px;
-        }
+.hero-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--green);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  display: flex; align-items: center; gap: 12px;
+}
+.hero-tag::before {
+  content: '';
+  width: 28px; height: 1px;
+  background: var(--green);
+}
 
-        .hero-title .highlight {
-            color: var(--green);
-            text-shadow: 0 0 40px rgba(0, 255, 65, 0.3);
-        }
+.hero-title {
+  font-family: var(--font-mono);
+  font-size: clamp(36px, 5.5vw, 58px);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.12;
+  letter-spacing: -.5px;
+  margin-bottom: 24px;
+}
 
-        .hero-subtitle {
-            font-size: 16px;
-            color: var(--text-dim);
-            line-height: 1.7;
-            margin-bottom: 40px;
-            max-width: 480px;
-            font-weight: 300;
-        }
+body.light .hero-title { color: #1a1a1a; }
 
-        .hero-actions {
-            display: flex;
-            gap: 16px;
-            align-items: center;
-        }
+.hero-title .highlight {
+  color: var(--green);
+  text-shadow: 0 0 40px var(--green-glow);
+}
 
-        .btn-primary {
-            display: inline-block;
-            padding: 14px 32px;
-            background: var(--green);
-            color: var(--bg);
-            text-decoration: none;
-            font-family: var(--font-body);
-            font-size: 14px;
-            font-weight: 600;
-            border-radius: 4px;
-            transition: all 0.3s;
-            letter-spacing: 0.5px;
-        }
+.hero-subtitle {
+  font-size: 16px;
+  font-weight: 300;
+  color: rgba(255,255,255,.75);
+  line-height: 1.7;
+  margin-bottom: 40px;
+  max-width: 460px;
+}
 
-        .btn-primary:hover {
-            background: var(--green-dim);
-            box-shadow: 0 0 30px var(--green-glow);
-            transform: translateY(-1px);
-        }
+body.light .hero-subtitle { color: rgba(0,0,0,.6); }
 
-        .btn-secondary {
-            display: inline-block;
-            padding: 14px 32px;
-            background: transparent;
-            color: var(--text);
-            text-decoration: none;
-            font-family: var(--font-body);
-            font-size: 14px;
-            font-weight: 500;
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            transition: all 0.3s;
-        }
+.hero-actions { display: flex; gap: 14px; align-items: center; }
 
-        .btn-secondary:hover {
-            border-color: var(--text-dim);
-            color: var(--text-bright);
-        }
+.btn-primary {
+  display: inline-block;
+  padding: 14px 32px;
+  background: var(--green);
+  color: #000;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: all .3s;
+}
+.btn-primary:hover {
+  background: var(--green-dim);
+  box-shadow: 0 0 30px var(--green-glow);
+  transform: translateY(-1px);
+}
 
-        /* ============================================
-           SECCIÓN FEATURES
-           ============================================ */
-        .features {
-            padding: 100px 40px;
-            border-top: 1px solid var(--border);
-        }
+.btn-secondary {
+  display: inline-block;
+  padding: 14px 32px;
+  background: rgba(255,255,255,.08);
+  backdrop-filter: blur(10px);
+  color: rgba(255,255,255,.8);
+  text-decoration: none;
+  font-size: 14px;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 6px;
+  transition: all .3s;
+}
+body.light .btn-secondary {
+  background: rgba(0,0,0,.05);
+  color: rgba(0,0,0,.6);
+  border-color: rgba(0,0,0,.1);
+}
+.btn-secondary:hover { border-color: rgba(255,255,255,.4); color: #fff; }
+body.light .btn-secondary:hover { border-color: rgba(0,0,0,.3); color: #000; }
 
-        .features-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
+.features {
+  padding: 100px 40px;
+  border-top: 1px solid var(--border);
+  transition: border-color .4s;
+}
 
-        .features-header h2 {
-            font-family: var(--font-display);
-            font-size: 28px;
-            color: var(--text-bright);
-            margin-bottom: 12px;
-        }
+.features-header { text-align: center; margin-bottom: 56px; }
+.features-header h2 { font-size: 28px; font-weight: 700; color: var(--text-bright); margin-bottom: 10px; }
+.features-header p { color: var(--text-dim); font-size: 15px; font-weight: 300; }
 
-        .features-header p {
-            color: var(--text-dim);
-            font-size: 15px;
-        }
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
 
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
+.feature-card {
+  padding: 32px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  transition: all .3s;
+}
+.feature-card:hover { border-color: var(--green); transform: translateY(-3px); }
 
-        .feature-card {
-            padding: 32px;
-            background: #0a0a0a;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            transition: all 0.3s;
-        }
+.feature-icon { font-size: 26px; margin-bottom: 16px; }
+.feature-card h3 { font-size: 15px; font-weight: 600; color: var(--text-bright); margin-bottom: 10px; }
+.feature-card p { font-size: 13px; font-weight: 300; color: var(--text); line-height: 1.6; }
 
-        .feature-card:hover {
-            border-color: rgba(0, 255, 65, 0.2);
-            transform: translateY(-4px);
-        }
+.categories {
+  padding: 80px 40px;
+  border-top: 1px solid var(--border);
+  transition: border-color .4s;
+}
 
-        .feature-icon {
-            font-size: 28px;
-            margin-bottom: 16px;
-        }
+.categories-header { margin-bottom: 48px; }
+.categories-header h2 { font-size: 15px; font-weight: 700; color: var(--text-bright); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
+.categories-header p { color: var(--text-dim); font-size: 14px; font-weight: 300; }
 
-        .feature-card h3 {
-            font-family: var(--font-display);
-            font-size: 14px;
-            color: var(--text-bright);
-            margin-bottom: 10px;
-        }
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  max-width: 1000px;
+}
 
-        .feature-card p {
-            font-size: 14px;
-            color: var(--text-dim);
-            line-height: 1.6;
-        }
+.category-col h3 { font-size: 13px; font-weight: 700; color: var(--text-bright); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+.category-col a { display: block; color: var(--text-dim); text-decoration: none; font-size: 13px; font-weight: 300; padding: 6px 0; transition: color .2s; }
+.category-col a:hover { color: var(--green); }
 
-        /* ============================================
-           FOOTER
-           ============================================ */
-        footer {
-            padding: 40px;
-            border-top: 1px solid var(--border);
-            text-align: center;
-        }
+.brand-story {
+  padding: 80px 40px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-light);
+  transition: background .4s, border-color .4s;
+}
 
-        footer p {
-            color: var(--text-dim);
-            font-size: 13px;
-        }
+.brand-story-content { max-width: 800px; margin: 0 auto; text-align: center; }
+.brand-story h2 { font-family: var(--font-brand); font-size: 28px; font-weight: 800; color: var(--text-bright); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 28px; }
+.brand-story p { font-size: 14px; font-weight: 300; color: var(--text); line-height: 1.8; margin-bottom: 16px; }
+.brand-story .emphasis { color: var(--text-bright); font-weight: 500; }
 
-        footer .footer-brand {
-            font-family: var(--font-display);
-            color: var(--green-dim);
-            font-weight: 700;
-        }
+footer {
+  padding: 40px;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+  transition: background .4s, border-color .4s;
+}
 
-        /* ============================================
-           ANIMACIONES DE ENTRADA
-           ============================================ */
-        @keyframes fade-up {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+.footer-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+.footer-brand-main { font-family: var(--font-brand); font-size: 16px; font-weight: 800; color: var(--text-bright); letter-spacing: 4px; text-transform: uppercase; }
+.footer-links { display: flex; gap: 24px; }
+.footer-links a { color: var(--text-dim); text-decoration: none; font-size: 12px; font-weight: 300; transition: color .2s; }
+.footer-links a:hover { color: var(--green); }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; }
+.footer-trademark { font-size: 12px; color: var(--text-dim); font-weight: 300; }
+.footer-trademark .registered { color: var(--green-dim); font-weight: 600; }
+.footer-country { font-size: 11px; color: var(--text-dim); letter-spacing: 1px; }
 
-        .hero-tag { animation: fade-up 0.6s ease 0.1s both; }
-        .hero-title { animation: fade-up 0.6s ease 0.25s both; }
-        .hero-subtitle { animation: fade-up 0.6s ease 0.4s both; }
-        .hero-actions { animation: fade-up 0.6s ease 0.55s both; }
+.chat-bubble {
+  position: fixed; bottom: 24px; right: 24px;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--green); color: #000;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 16px var(--green-glow);
+  border: none; z-index: 200; transition: all .3s;
+}
+.chat-bubble svg { width: 24px; height: 24px; }
+.chat-bubble:hover { transform: scale(1.08); box-shadow: 0 4px 24px var(--green-glow); }
 
-        /* ============================================
-           RESPONSIVE
-           ============================================ */
-        @media (max-width: 768px) {
-            nav { padding: 16px 20px; }
-            .nav-links { gap: 16px; }
-            .hero { padding: 0 20px; }
-            .features { padding: 60px 20px; }
-            .features-grid { grid-template-columns: 1fr; }
-            .hero-actions { flex-direction: column; align-items: flex-start; }
-        }
-    </style>
+.chat-container {
+  position: fixed; bottom: 90px; right: 24px;
+  width: 360px; height: 500px;
+  background: rgba(20,20,20,.75);
+  backdrop-filter: blur(30px) saturate(1.3);
+  -webkit-backdrop-filter: blur(30px) saturate(1.3);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 18px;
+  display: flex; flex-direction: column;
+  opacity: 0; pointer-events: none; transform: translateY(20px);
+  transition: .3s ease; overflow: hidden; z-index: 200;
+  box-shadow: 0 8px 32px rgba(0,0,0,.4);
+}
+body.light .chat-container {
+  background: rgba(255,255,255,.7);
+  border-color: rgba(0,0,0,.08);
+  box-shadow: 0 8px 32px rgba(0,0,0,.1);
+}
+.chat-container.active { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
+.chat-header {
+  background: var(--green); color: #000;
+  padding: 14px 18px; font-weight: 600; font-size: 14px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-radius: 18px 18px 0 0;
+}
+.close-btn { background: none; border: none; color: #000; font-size: 16px; cursor: pointer; opacity: .7; }
+.close-btn:hover { opacity: 1; }
+
+.messages { flex: 1; padding: 14px; overflow-y: auto; background: transparent; }
+.message { margin: 8px 0; padding: 10px 14px; border-radius: 12px; max-width: 85%; font-size: 13px; line-height: 1.5; }
+.bot { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); color: var(--text); }
+body.light .bot { background: rgba(0,0,0,.04); border-color: rgba(0,0,0,.06); }
+.user { background: var(--green-subtle); border: 1px solid var(--green-glow); color: var(--text-bright); margin-left: auto; }
+.button-container { margin-top: 8px; }
+.option-btn {
+  display: block; width: 100%; margin: 5px 0; padding: 9px 12px;
+  border: 1px solid rgba(255,255,255,.08); border-radius: 10px;
+  background: rgba(255,255,255,.04); color: var(--text-bright);
+  cursor: pointer; font-size: 12px; font-family: var(--font);
+  text-align: left; transition: all .2s;
+}
+body.light .option-btn { background: rgba(0,0,0,.03); border-color: rgba(0,0,0,.06); }
+.option-btn:hover { border-color: var(--green); color: var(--green); background: var(--green-subtle); }
+
+.chat-input { display: flex; border-top: 1px solid rgba(255,255,255,.08); }
+body.light .chat-input { border-top-color: rgba(0,0,0,.06); }
+.chat-input input {
+  flex: 1; padding: 12px 14px; border: none; outline: none;
+  background: transparent; color: var(--text-bright);
+  font-family: var(--font); font-size: 13px;
+}
+.chat-input input::placeholder { color: var(--text-dim); }
+.chat-input button {
+  background: var(--green); color: #000; border: none;
+  padding: 12px 16px; cursor: pointer;
+  font-family: var(--font); font-weight: 600; font-size: 13px;
+}
+.chat-input button:hover { background: var(--green-dim); }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-tag { animation: fade-up .6s ease .1s both; }
+.hero-title { animation: fade-up .6s ease .25s both; }
+.hero-subtitle { animation: fade-up .6s ease .4s both; }
+.hero-actions { animation: fade-up .6s ease .55s both; }
+
+@media (max-width: 768px) {
+  nav { padding: 14px 20px; }
+  .nav-brand { font-size: 16px; }
+  .nav-links { gap: 12px; }
+  .hero { padding: 0 20px; }
+  .features { padding: 60px 20px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .categories { padding: 60px 20px; }
+  .categories-grid { grid-template-columns: repeat(2, 1fr); gap: 28px; }
+  .brand-story { padding: 60px 20px; }
+  .hero-actions { flex-direction: column; align-items: flex-start; }
+  .footer-top, .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+  .chat-container { width: calc(100% - 48px); }
+}
+</style>
 </head>
 <body>
 
-    <!-- ============================================
-         NAVEGACIÓN
-         ============================================ -->
-    <nav>
-        <div class="nav-brand">El Sótano de Sam</div>
-        <div class="nav-links">
-            <a href="#features">Sistema</a>
-            <a href="login.html" class="btn-login">Acceder</a>
-        </div>
-    </nav>
+<nav>
+  <div class="nav-brand">El Sótano de Sam</div>
+  <div class="nav-links">
+    <a href="#categorias">Categorías</a>
+    <a href="#historia">Nuestra historia</a>
+    <button class="theme-toggle" id="themeToggle" title="Cambiar tema"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21.75 15.5a9.72 9.72 0 0 1-5.46 1.63C10.29 17.13 5.13 12 5.13 5.97a9.7 9.7 0 0 1 1.63-5.46C2.96 2.35 0 6.53 0 11.38 0 18.4 5.6 24 12.62 24c4.85 0 9.03-2.96 10.88-7.17a9.8 9.8 0 0 1-1.75 1.3z"/></svg></button>
+    <a href="login.html" class="btn-login">Acceder</a>
+  </div>
+</nav>
 
-    <!-- ============================================
-         HERO
-         ============================================ -->
-    <section class="hero">
-        <div class="hero-content">
-            <div class="hero-tag">Importado · Exclusivo · Atemporal</div>
-            <h1 class="hero-title">
-                El lujo<br>
-                silencioso<br>
-                <span class="highlight">vive aquí</span>
-            </h1>
-            <p class="hero-subtitle">
-                Sistema de gestión de inventario para ropa vintage y de segunda mano.
-                Control total de stock, categorías y productos en tiempo real.
-            </p>
-            <div class="hero-actions">
-                <a href="login.html" class="btn-primary">Registrarse</a>
-                <a href="#features" class="btn-secondary">Vista previa</a>
-            </div>
-        </div>
-    </section>
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-tag">Importado · Exclusivo · Atemporal</div>
+    <h1 class="hero-title">El lujo<br>silencioso<br><span class="highlight">vive aquí</span></h1>
+    <p class="hero-subtitle">Moda con intención, sin el precio inflado del lujo tradicional.</p>
+    <div class="hero-actions">
+      <a href="login.html" class="btn-primary">Regístrate ahora</a>
+      <a href="#categorias" class="btn-secondary">Vista previa</a>
+    </div>
+  </div>
+</section>
 
-    <!-- ============================================
-         FEATURES
-         ============================================ -->
-    <section class="features" id="features">
-        <div class="features-header">
-            <h2>Sistema de gestión</h2>
-            <p>Todo lo que necesitas para administrar tu inventario vintage</p>
-        </div>
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">📦</div>
-                <h3>Inventario completo</h3>
-                <p>Registra cada prenda con nombre, marca, talla, categoría, precio y estado de forma organizada.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">⚡</div>
-                <h3>API REST</h3>
-                <p>Backend robusto con endpoints para crear, leer, actualizar y eliminar productos en tiempo real.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📊</div>
-                <h3>Dashboard admin</h3>
-                <p>Panel de control con estadísticas de stock, valor del inventario y gestión visual de productos.</p>
-            </div>
-        </div>
-    </section>
+<section class="features" id="features">
+  <div class="features-header">
+    <h2>Sistema de gestión</h2>
+    <p>Todo lo que necesitas para administrar tu inventario vintage</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card"><div class="feature-icon">📦</div><h3>Inventario completo</h3><p>Registra cada prenda con nombre, marca, talla, categoría, precio y estado de forma organizada.</p></div>
+    <div class="feature-card"><div class="feature-icon">⚡</div><h3>API REST</h3><p>Backend robusto con endpoints para crear, leer, actualizar y eliminar productos en tiempo real.</p></div>
+    <div class="feature-card"><div class="feature-icon">📊</div><h3>Dashboard admin</h3><p>Panel de control con estadísticas de stock, valor del inventario y gestión visual de productos.</p></div>
+  </div>
+</section>
 
-    <!-- ============================================
-         FOOTER
-         ============================================ -->
-    <footer>
-        <p><span class="footer-brand">El Sótano de Sam</span> — Stock en Línea · Proyecto ADSO 2026</p>
-    </footer>
+<section class="categories" id="categorias">
+  <div class="categories-header">
+    <h2>Explora nuestras categorías</h2>
+    <p>Encuentra tu estilo en nuestra colección curada</p>
+  </div>
+  <div class="categories-grid">
+    <div class="category-col"><h3>Chaquetas</h3><a href="#">Chaquetas de cuero</a><a href="#">Bomber jackets</a><a href="#">Denim jackets</a><a href="#">Windbreakers</a><a href="#">Blazers vintage</a></div>
+    <div class="category-col"><h3>Camisetas</h3><a href="#">Band tees</a><a href="#">Graphic tees</a><a href="#">Polo vintage</a><a href="#">Oversized tees</a><a href="#">Jerseys deportivos</a></div>
+    <div class="category-col"><h3>Pantalones</h3><a href="#">Jeans clásicos</a><a href="#">Cargo pants</a><a href="#">Corduroy</a><a href="#">Track pants</a><a href="#">Wide leg</a></div>
+    <div class="category-col"><h3>Accesorios</h3><a href="#">Gorras y sombreros</a><a href="#">Bolsos y morrales</a><a href="#">Cinturones</a><a href="#">Bufandas</a><a href="#">Gafas vintage</a></div>
+  </div>
+</section>
 
+<section class="brand-story" id="historia">
+  <div class="brand-story-content">
+    <h2>Ropa vintage importada y curada</h2>
+    <p><span class="emphasis">El Sótano de Sam</span> nació como una propuesta de moda accesible y consciente. Cada prenda es seleccionada con criterio estético, pensada para que cualquier persona pueda acceder a ropa de calidad. No es ropa usada cualquiera — es <span class="emphasis">ropa seleccionada</span>.</p>
+    <p>Creemos en la moda circular, en darle una segunda vida a prendas que todavía tienen mucho que ofrecer. Cada pieza que entra a nuestro inventario pasa por un proceso de curaduría donde evaluamos calidad, estado y potencial de estilo.</p>
+    <p><span class="emphasis">El Sótano de Sam</span> une moda vintage importada con quienes entienden que el estilo real nace de la autenticidad, no de modas fugaces. Porque la verdadera exclusividad no necesita exhibirse: <span class="emphasis">se percibe</span>.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand-main">El Sótano de Sam</div>
+    <div class="footer-links"><a href="#features">Sistema</a><a href="#categorias">Categorías</a><a href="#historia">Nuestra historia</a><a href="login.html">Acceder</a></div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-trademark">© 2026 <span class="registered">El Sótano de Sam ®</span> — Todos los derechos reservados</div>
+    <div class="footer-country">CO</div>
+  </div>
+</footer>
+
+<button class="chat-bubble" id="chatToggle"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg></button>
+<div class="chat-container" id="chatContainer">
+  <div class="chat-header">SAMBOT<button class="close-btn" id="closeChat">✕</button></div>
+  <div class="messages" id="messages"></div>
+  <div class="chat-input"><input type="text" id="userInput" placeholder="Escribe tu pregunta..."><button id="sendBtn">Enviar</button></div>
+</div>
+
+<script>
+var chatToggle=document.getElementById("chatToggle"),chatContainer=document.getElementById("chatContainer"),closeChat=document.getElementById("closeChat"),messages=document.getElementById("messages"),userInput=document.getElementById("userInput"),sendBtn=document.getElementById("sendBtn");
+function addMessage(t,s){var d=document.createElement("div");d.classList.add("message",s);d.textContent=t;messages.appendChild(d);messages.scrollTop=messages.scrollHeight}
+function addButtons(opts){var c=document.createElement("div");c.classList.add("button-container");opts.forEach(function(o){var b=document.createElement("button");b.textContent=o.text;b.classList.add("option-btn");b.onclick=o.action;c.appendChild(b)});messages.appendChild(c);messages.scrollTop=messages.scrollHeight}
+function mainMenu(){addMessage("Hola, soy SAMBOT, el asistente de El Sótano de Sam. ¿En qué puedo ayudarte?","bot");addButtons([{text:"🌿 Moda sostenible",action:modaMenu},{text:"🚚 Envíos y rastreo",action:envios},{text:"💳 Pagos",action:pagos},{text:"🔄 Cambios y devoluciones",action:devoluciones},{text:"Soporte",action:soporte}])}
+function modaMenu(){addMessage("En El Sótano de Sam promovemos moda consciente. ¿Qué deseas saber?","bot");addButtons([{text:"¿Qué es moda sostenible?",action:function(){addMessage("La moda sostenible busca reducir el impacto ambiental mediante reutilización, consumo responsable y disminución del desperdicio textil.","bot")}},{text:"¿Por qué comprar segunda mano?",action:function(){addMessage("Comprar segunda mano prolonga la vida útil de las prendas y reduce la producción masiva del fast fashion.","bot")}},{text:"Volver al menú",action:mainMenu}])}
+function envios(){addMessage("Realizamos envíos nacionales entre 2 y 5 días hábiles. Una vez despachado, recibirás un número de guía para seguimiento.","bot")}
+function pagos(){addMessage("Aceptamos pagos digitales y transferencias bancarias. Trabajamos con pagos anticipados para garantizar seguridad.","bot")}
+function devoluciones(){addMessage("Si tu prenda presenta algún defecto, puedes solicitar cambio o devolución dentro de los primeros 3 días después de recibirla.","bot")}
+function soporte(){addMessage("Para atención personalizada, escríbenos a nuestro canal oficial. Estamos aquí para ayudarte.","bot")}
+function botResponse(t){var l=t.toLowerCase();if(l.includes("hola"))return mainMenu();if(l.includes("envio"))return envios();if(l.includes("pago"))return pagos();if(l.includes("devolucion"))return devoluciones();if(l.includes("moda"))return modaMenu();addMessage("Puedo ayudarte con moda sostenible, envíos, pagos o cambios. Usa los botones para navegar.","bot")}
+sendBtn.onclick=function(){var v=userInput.value.trim();if(!v)return;addMessage(v,"user");userInput.value="";botResponse(v)};
+userInput.addEventListener("keypress",function(e){if(e.key==="Enter")sendBtn.click()});
+chatToggle.onclick=function(){chatContainer.classList.add("active")};
+closeChat.onclick=function(){chatContainer.classList.remove("active")};
+mainMenu();
+
+var themeToggle=document.getElementById("themeToggle");
+themeToggle.onclick=function(){
+  document.body.classList.toggle("light");
+  themeToggle.innerHTML=document.body.classList.contains("light")?'<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.73 12.73l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>':'<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21.75 15.5a9.72 9.72 0 0 1-5.46 1.63C10.29 17.13 5.13 12 5.13 5.97a9.7 9.7 0 0 1 1.63-5.46C2.96 2.35 0 6.53 0 11.38 0 18.4 5.6 24 12.62 24c4.85 0 9.03-2.96 10.88-7.17a9.8 9.8 0 0 1-1.75 1.3z"/></svg>';
+};
+</script>
 </body>
 </html>
