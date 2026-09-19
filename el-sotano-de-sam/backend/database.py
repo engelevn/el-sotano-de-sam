@@ -1,7 +1,11 @@
 import sqlite3
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, 'sotano.db')
 
 def conectar():
-    conexion = sqlite3.connect('sotano.db')
+    conexion = sqlite3.connect(DB_PATH)
     conexion.row_factory = sqlite3.Row
     return conexion
 
