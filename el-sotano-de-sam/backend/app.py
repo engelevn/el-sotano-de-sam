@@ -191,7 +191,7 @@ def eliminar_producto(id):
 @click.argument('email')
 def crear_admin(email):
     password = click.prompt('Contraseña (mínimo 8 caracteres)',
-                            hide_input=False, confirmation_prompt=True)
+                            hide_input=True, confirmation_prompt=True)
     if len(password) < 8:
         raise click.ClickException('La contraseña es muy corta')
     email = email.strip().lower()
