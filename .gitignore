@@ -9,3 +9,5 @@ env/
 .vscode/
 *.log
 proyecto.zip
+venv/
+.env

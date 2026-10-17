@@ -73,7 +73,7 @@ body.light .theme-toggle{background:rgba(0,0,0,.06);border-color:rgba(0,0,0,.1);
 <div class="error-msg" id="error-msg">Correo o contraseña incorrectos</div>
 <div class="form-group">
 <label>Correo electrónico</label>
-<input type="email" id="input-email" placeholder="admin@sotanodesam.com">
+<input type="email" id="input-email" placeholder="tucorreo@ejemplo.com">
 </div>
 <div class="form-group">
 <label>Clave de acceso</label>
@@ -89,8 +89,23 @@ body.light .theme-toggle{background:rgba(0,0,0,.06);border-color:rgba(0,0,0,.1);
 </div>
 </div>
 <script>
-var ADMIN_EMAIL='admin@sotanodesam.com',ADMIN_PASSWORD='admin123';
-function iniciarSesion(){var e=document.getElementById('input-email').value.trim(),p=document.getElementById('input-password').value,err=document.getElementById('error-msg');if(!e||!p){err.textContent='Por favor completa todos los campos';err.classList.add('show');return}if(e===ADMIN_EMAIL&&p===ADMIN_PASSWORD){localStorage.setItem('loggedIn','true');localStorage.setItem('user',e);window.location.href='dashboard.html'}else{err.textContent='Correo o contraseña incorrectos';err.classList.add('show');document.querySelector('.login-card').style.animation='none';setTimeout(function(){document.querySelector('.login-card').style.animation='shake 0.4s ease'},10)}}
+async function iniciarSesion(){
+  var e=document.getElementById('input-email').value.trim(),
+      p=document.getElementById('input-password').value,
+      err=document.getElementById('error-msg'),
+      card=document.querySelector('.login-card');
+  if(!e||!p){err.textContent='Por favor completa todos los campos';err.classList.add('show');return}
+  try{
+    var r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e,password:p})});
+    if(r.ok){window.location.href='/dashboard';return}
+    err.textContent=r.status===401?'Correo o contraseña incorrectos':'Error del servidor, intenta de nuevo';
+  }catch(_){
+    err.textContent='No se pudo conectar con el servidor';
+  }
+  err.classList.add('show');
+  card.style.animation='none';
+  setTimeout(function(){card.style.animation='shake 0.4s ease'},10);
+}
 function togglePassword(){var i=document.getElementById('input-password'),b=document.getElementById('btn-toggle');if(i.type==='password'){i.type='text';b.textContent='🔒'}else{i.type='password';b.textContent='👁'}}
 document.addEventListener('keydown',function(e){if(e.key==='Enter')iniciarSesion()});
 var themeToggle=document.getElementById('themeToggle');
